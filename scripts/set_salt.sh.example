@@ -1,0 +1,3 @@
+#!/bin/bash
+
+export CAAS_API_SALT=badandinsecuresalt
