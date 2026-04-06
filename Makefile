@@ -7,7 +7,6 @@ lint:
 # make test TEST_ARGS=-s for verbose test outputs
 test: lint
 	source .venv/bin/activate && \
-	export CAAS_API_SALT=testsalt && \
 	export CAAS_API=testing && \
 	export CAAS_API_NAMESPACE="testing" && \
 	export CAAS_API_KUBERNETES_URL="https://testing:1234" && \
@@ -17,7 +16,6 @@ test: lint
 
 coverage: lint
 	source .venv/bin/activate && \
-	export CAAS_API_SALT=testsalt && \
 	export CAAS_API=testing && \
 	export CAAS_API_NAMESPACE=testing && \
 	export CAAS_API_KUBERNETES_URL="https://testing:1234" && \
