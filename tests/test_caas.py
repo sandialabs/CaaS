@@ -8,6 +8,9 @@ import json
 from pathlib import Path
 
 import pytest
+from starlette.routing import Mount, Route
+from starlette.staticfiles import StaticFiles
+
 from caas import (
     api,
     get_heartbeat,
@@ -22,8 +25,6 @@ from caas import (
     run_command,
     submit_job,
 )
-from starlette.routing import Mount, Route
-from starlette.staticfiles import StaticFiles
 
 
 @pytest.mark.xfail

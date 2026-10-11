@@ -5,8 +5,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 import pytest
-from caas import api
 from starlette.authentication import requires
+
+from caas import api
 
 
 @pytest.fixture

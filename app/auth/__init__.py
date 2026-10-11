@@ -6,14 +6,13 @@
 
 import logging
 
-from starlette.authentication import AuthCredentials, AuthenticationBackend
-
 from auth.token import (
     authenticate_with_token,
     extract_token_and_secret,
     extract_token_identifier,
 )
 from auth.users import SimpleApiUser
+from starlette.authentication import AuthCredentials, AuthenticationBackend
 
 logger = logging.getLogger("caas.auth")
 
@@ -29,7 +28,7 @@ class BasicAuthenticationBackend(AuthenticationBackend):
                 logger.error("error extracting token and secret")
                 return
 
-            (is_authenticated, username) = authenticate_with_token(token_id, secret)
+            is_authenticated, username = authenticate_with_token(token_id, secret)
             if is_authenticated is False:
                 logger.warning(
                     f"{extract_token_identifier(token_id)} failed to authenticate"

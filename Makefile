@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 lint:
 	source .venv/bin/activate && \
 	isort app/ tests/ && \
@@ -7,6 +9,7 @@ lint:
 # make test TEST_ARGS=-s for verbose test outputs
 test: lint
 	source .venv/bin/activate && \
+	. ./scripts/set_salt.sh; \
 	export CAAS_API=testing && \
 	export CAAS_API_NAMESPACE="testing" && \
 	export CAAS_API_KUBERNETES_URL="https://testing:1234" && \
@@ -56,4 +59,3 @@ pre-commit:
 	$(MAKE) lint; \
 	$(MAKE) test; \
 	$(CONTAINER_CMD) build --pull --no-cache -t localhost/caas-api:$(BUILD_TAG) .
-

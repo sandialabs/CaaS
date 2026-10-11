@@ -4,9 +4,8 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-from starlette.authentication import BaseUser
-
 from auth.token import extract_token_identifier
+from starlette.authentication import BaseUser
 
 
 class SimpleApiUser(BaseUser):

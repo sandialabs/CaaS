@@ -56,7 +56,7 @@ if "CAAS_API" in os.environ and os.environ["CAAS_API"] == "openshift":
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
-(batch_v1, core_v1) = get_kubernetes_api_instances()
+batch_v1, core_v1 = get_kubernetes_api_instances()
 
 
 async def log_request(request):

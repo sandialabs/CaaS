@@ -6,7 +6,7 @@
 
 import os
 import sys
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from kubejob import (
@@ -358,7 +358,7 @@ def test_delete_job_not_found():
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_stream_stdout_success():
     instance_mock = MagicMock()
     request_mock = MagicMock(user=MagicMock(username="testuser"))
@@ -371,7 +371,7 @@ async def test_stream_stdout_success():
         assert output == log_event
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_stream_stdout_user_disconnection():
     instance_mock = MagicMock()
     request_mock = MagicMock(user=MagicMock(username="testuser"))

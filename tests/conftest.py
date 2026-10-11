@@ -12,6 +12,11 @@ import pytest
 from starlette.testclient import TestClient
 
 
+@pytest.fixture(params=["asyncio", "trio"])
+def anyio_backend(request):
+    return request.param
+
+
 @pytest.fixture
 def test_client_factory(anyio_backend_name, anyio_backend_options):
     # anyio_backend_name defined by:

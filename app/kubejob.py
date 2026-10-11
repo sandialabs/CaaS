@@ -259,7 +259,9 @@ def read_job_status(batch, core, username, token, uuid):
         return None, None
 
 
-def read_pod_log(batch, core, username, token, uuid, since_seconds, tail_lines):  # pylint: disable=too-many-arguments
+def read_pod_log(
+    batch, core, username, token, uuid, since_seconds, tail_lines
+):  # pylint: disable=too-many-arguments
     logger.info(f"{username} is reading output for job={uuid}")
     if since_seconds is not None and since_seconds < 0:
         raise ValueError("since_seconds must be a non-negative integer")

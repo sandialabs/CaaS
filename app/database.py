@@ -34,7 +34,7 @@ def release(con):
 
 def select_user(token):
     try:
-        (con, cur) = connect()
+        con, cur = connect()
         res = cur.execute(
             "SELECT username, token, salted_secret_hash FROM users WHERE token = ?",
             (token,),
@@ -50,7 +50,7 @@ def select_user(token):
 
 def insert_new_user(username, pt, token, salted_secret_hash, timestamp):
     try:
-        (con, cur) = connect()
+        con, cur = connect()
         cur.execute(
             "INSERT INTO users (username, pt, token, salted_secret_hash, created_at) VALUES (?, ?, ?, ?, ?)",
             (username, pt, token, salted_secret_hash, timestamp),

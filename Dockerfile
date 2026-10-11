@@ -4,14 +4,14 @@ ENV PYTHONUNBUFFERED=1
 
 RUN microdnf upgrade --refresh -y --setopt=tsflags=nodocs && \
     microdnf update -y && \
-    microdnf install python3-pip gcc python3-devel sqlite -y && \
+    microdnf install python3.14 python3.14-pip gcc python3.14-devel sqlite -y && \
     microdnf clean all && \
-    pip install pip --upgrade && \
-    pip install setuptools && \
+    pip3.14 install --root-user-action ignore pip --upgrade && \
+    pip3.14 install --root-user-action ignore setuptools && \
     rm -rf /var/cache
 
 RUN --mount=type=bind,source=requirements.txt,target=/requirements.txt \
-    pip3 install --root-user-action ignore --no-cache-dir -r requirements.txt
+    pip3.14 install --root-user-action ignore --no-cache-dir -r requirements.txt
 
 COPY ./app /app
 
