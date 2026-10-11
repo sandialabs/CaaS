@@ -27,7 +27,7 @@ coverage: lint
 CONTAINER_CMD ?= podman
 BUILD_TAG=develop
 build:
-	$(CONTAINER_CMD) build -t caas-api:$(BUILD_TAG) .
+	$(CONTAINER_CMD) build -t localhost/caas-api:$(BUILD_TAG) .
 
 startdb:
 	$(CONTAINER_CMD) start timescaledb
@@ -49,11 +49,11 @@ run:
 	--mount type=bind,source=$$(pwd)/app,target=/app \
 	-p=8000:8000 \
 	--name caas-api \
-	caas-api:$(BUILD_TAG) --reload
+	localhost/caas-api:$(BUILD_TAG) --reload
 
 pre-commit:
 	set -e; \
 	$(MAKE) lint; \
 	$(MAKE) test; \
-	$(CONTAINER_CMD) build --pull --no-cache -t caas-api:$(BUILD_TAG) .
+	$(CONTAINER_CMD) build --pull --no-cache -t localhost/caas-api:$(BUILD_TAG) .
 

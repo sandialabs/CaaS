@@ -46,8 +46,8 @@ Steps for bringing up CaaS API for local development
     make run
 
     # Note make defaults to podman. If running on a system using docker, use:
-    make CONTAINER_CMD=docker build
-    make CONTAINER_CMD=docker run
+    CONTAINER_CMD=docker make build
+    CONTAINER_CMD=docker make run
     ```
 1. Go to `localhost:8000/api` on your browser
 
