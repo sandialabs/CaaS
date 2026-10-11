@@ -6,7 +6,7 @@
 
 import os
 import sys
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from kubejob import (
@@ -358,17 +358,34 @@ def test_delete_job_not_found():
     )
 
 
+def _fake_watch_stream(instance_mock, pod_event, log_event):
+    """Build a side_effect for a mocked watch.Watch().stream() that bypasses
+    the real kubernetes watch machinery (which expects a raw, low-level HTTP
+    response object from the API function) and instead yields the events
+    directly, based on which API function was passed in.
+    """
+
+    def fake_stream(func, *args, **kwargs):
+        if func is instance_mock.list_namespaced_pod:
+            return iter([pod_event])
+        return iter([log_event])
+
+    return fake_stream
+
+
 @pytest.mark.anyio
 async def test_stream_stdout_success():
     instance_mock = MagicMock()
     request_mock = MagicMock(user=MagicMock(username="testuser"))
     uuid = "1234"
     pod_event = {"raw_object": {"metadata": {"name": "testuser--abcd-1234-pod"}}}
-    instance_mock.list_namespaced_pod = AsyncMock(return_value=[pod_event])
     log_event = "Log output"
-    instance_mock.read_namespaced_pod_log = AsyncMock(return_value=[log_event])
-    async for output in stream_stdout(instance_mock, request_mock, uuid):
-        assert output == log_event
+    with patch("kubejob.watch.Watch") as watch_class_mock:
+        watch_class_mock.return_value.stream.side_effect = _fake_watch_stream(
+            instance_mock, pod_event, log_event
+        )
+        async for output in stream_stdout(instance_mock, request_mock, uuid):
+            assert output == log_event
 
 
 @pytest.mark.anyio
@@ -377,9 +394,11 @@ async def test_stream_stdout_user_disconnection():
     request_mock = MagicMock(user=MagicMock(username="testuser"))
     uuid = "1234"
     pod_event = {"raw_object": {"metadata": {"name": "testuser-abcd-1234-pod"}}}
-    instance_mock.list_namespaced_pod = AsyncMock(return_value=[pod_event])
     log_event = "Log output"
-    instance_mock.read_namespaced_pod_log = AsyncMock(return_value=[log_event])
     request_mock.is_disconnected = AsyncMock(return_value=True)
-    async for output in stream_stdout(instance_mock, request_mock, uuid):
-        assert output == log_event
+    with patch("kubejob.watch.Watch") as watch_class_mock:
+        watch_class_mock.return_value.stream.side_effect = _fake_watch_stream(
+            instance_mock, pod_event, log_event
+        )
+        async for output in stream_stdout(instance_mock, request_mock, uuid):
+            assert output == log_event
